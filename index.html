@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 🎉</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    overflow:hidden;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(-45deg,#ff4e50,#fc913a,#f9d423,#ff6ec7);
+    background-size:400% 400%;
+    animation:bg 12s ease infinite;
+}
+
+@keyframes bg{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:0;
+}
+
+.card{
+    position:relative;
+    z-index:2;
+    width:90%;
+    max-width:400px;
+    padding:35px;
+    text-align:center;
+    border-radius:25px;
+    background:rgba(255,255,255,0.18);
+    backdrop-filter:blur(12px);
+    color:white;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+    animation:pop 1s ease;
+}
+
+@keyframes pop{
+    from{
+        transform:scale(.4);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+h1{
+    font-size:2.4rem;
+    margin-bottom:15px;
+}
+
+h2{
+    font-size:1.4rem;
+    margin-bottom:15px;
+}
+
+p{
+    font-size:1rem;
+    line-height:1.7;
+}
+
+.emoji{
+    font-size:65px;
+    animation:bounce 1.8s infinite;
+}
+
+@keyframes bounce{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-12px);
+    }
+}
+
+button{
+    margin-top:25px;
+    padding:12px 28px;
+    border:none;
+    border-radius:30px;
+    background:white;
+    color:#ff4081;
+    font-size:17px;
+    cursor:pointer;
+    transition:.3s;
+    font-weight:bold;
+}
+
+button:hover{
+    transform:scale(1.08);
+}
+
+/* Balloons */
+
+.balloon{
+    position:absolute;
+    bottom:-150px;
+    width:60px;
+    height:75px;
+    border-radius:50%;
+    opacity:.85;
+    animation:float 10s linear infinite;
+}
+
+.balloon:before{
+    content:"";
+    position:absolute;
+    width:2px;
+    height:80px;
+    background:white;
+    left:50%;
+    top:75px;
+}
+
+.red{background:#ff4b5c;left:10%;}
+.blue{background:#4ea8ff;left:30%;animation-duration:11s;}
+.green{background:#4cd964;left:55%;animation-duration:9s;}
+.yellow{background:#ffd93d;left:80%;animation-duration:12s;}
+
+@keyframes float{
+    from{
+        transform:translateY(0);
+    }
+    to{
+        transform:translateY(-130vh);
+    }
+}
+
+@media(max-width:600px){
+
+.card{
+padding:25px;
+}
+
+h1{
+font-size:2rem;
+}
+
+h2{
+font-size:1.2rem;
+}
+
+.emoji{
+font-size:55px;
+}
+
+button{
+font-size:16px;
+}
+}
+</style>
+
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div class="balloon red"></div>
+<div class="balloon blue"></div>
+<div class="balloon green"></div>
+<div class="balloon yellow"></div>
+
+<div class="card">
+
+<div class="emoji">🎂</div>
+
+<h1>Happy Birthday!</h1>
+
+<h2>Dear Friend ❤️</h2>
+
+<p>
+May your day be filled with happiness,
+love, laughter and unforgettable memories.
+Wishing you success, good health,
+and endless joy in the coming year.
+Have an amazing birthday! 🎉🥳
+</p>
+
+<button onclick="celebrate()">
+🎊 Celebrate!
+</button>
+
+</div>
+
+<!-- Optional Background Music -->
+<!--
+<audio autoplay loop>
+<source src="birthday.mp3" type="audio/mpeg">
+</audio>
+-->
+
+<script>
+
+// Extra Confetti Burst
+
+function celebrate(){
+    for(let i=0;i<150;i++){
+        confettiPieces.push(new Confetti());
+    }
+}
+
+// Canvas Confetti
+
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+}
+resize();
+window.addEventListener("resize",resize);
+
+const colors=[
+"#ff4d4d",
+"#4dff88",
+"#4da6ff",
+"#ffff66",
+"#ff66ff",
+"#ffffff",
+"#ffa64d"
+];
+
+class Confetti{
+
+constructor(){
+
+this.x=Math.random()*canvas.width;
+this.y=Math.random()*canvas.height-canvas.height;
+
+this.r=Math.random()*6+4;
+
+this.color=colors[Math.floor(Math.random()*colors.length)];
+
+this.speed=Math.random()*3+2;
+
+this.tilt=Math.random()*10-10;
+
+this.angle=Math.random()*Math.PI;
+
+}
+
+update(){
+
+this.y+=this.speed;
+
+this.x+=Math.sin(this.angle);
+
+this.angle+=0.03;
+
+if(this.y>canvas.height){
+
+this.y=-20;
+
+this.x=Math.random()*canvas.width;
+
+}
+
+}
+
+draw(){
+
+ctx.beginPath();
+
+ctx.fillStyle=this.color;
+
+ctx.fillRect(this.x,this.y,this.r,this.r);
+
+}
+
+}
+
+let confettiPieces=[];
+
+for(let i=0;i<220;i++){
+
+confettiPieces.push(new Confetti());
+
+}
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+confettiPieces.forEach(c=>{
+
+c.update();
+
+c.draw();
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
